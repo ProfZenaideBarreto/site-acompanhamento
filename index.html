@@ -1,11 +1,10 @@
-	
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Acompanhamento Pedagógico 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Biblioteca para trabalhar com PDF se necessário (mantida do original) -->
+  <!-- Biblioteca para trabalhar com PDF -->
   <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
   <!-- ======== ESTILOS MODERNOS E RESPONSIVOS ======== -->
@@ -94,12 +93,15 @@
     .btn.ghost{
       background:transparent;
       color:var(--primary);
-      border:1px solid rgba(43,108,176,0.08);
+      border:1px solid rgba(43,108,176,0.2);
       box-shadow:none;
+    }
+    .btn.ghost:hover{
+      background: rgba(43,108,176,0.05);
     }
     .btn:active{transform:translateY(1px);}
 
-    /* Container do formulário (com espaço para o header fixo) */
+    /* Container do formulário */
     .container{
       max-width:1000px;
       margin:92px auto 40px;
@@ -207,32 +209,20 @@
       margin-top:14px;
     }
 
-    /* WhatsApp button style */
-    .whatsapp{
-      background:linear-gradient(90deg,#25D366,#1DA851);
-      padding:10px 12px;
-      border-radius:10px;
-      color:white;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      text-decoration:none;
-      font-weight:700;
-      box-shadow:0 8px 20px rgba(37,211,102,0.12);
-    }
-
-    /* Section accent backgrounds for header of each accordion */
+    /* Section accent backgrounds */
     .accent-1{ background: linear-gradient(90deg,var(--accent-1),#e6f7ff); }
     .accent-2{ background: linear-gradient(90deg,var(--accent-2),#f0fff6); }
     .accent-3{ background: linear-gradient(90deg,var(--accent-3),#fffdf0); }
     .accent-4{ background: linear-gradient(90deg,var(--accent-4),#fff7fb); }
     .accent-5{ background: linear-gradient(90deg,var(--accent-5),#fff7ed); }
 
-    /* Small screens adjustments */
+    /* Layout Responsivo */
+    .form-grid-3{ display:grid; grid-template-columns:1fr; gap:12px; }
     @media (min-width:700px){
       .form-grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+      .form-grid-3{ display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; }
     }
-  
+
     /* Barra de progresso */
     .progress-container {
       width: 100%;
@@ -252,248 +242,182 @@
       line-height: 18px;
       transition: width 0.3s ease;
     }
-
-</style>
+  </style>
 </head>
 <body>
 
   <!-- ========== CABEÇALHO FIXO ========== -->
-  <header class="app-header" id="appHeader" role="banner" aria-label="Cabeçalho do formulário">
-    <div class="brand" aria-hidden="true">
-      <!-- Pequeno ícone educativo (SVG) -->
-      <svg width="38" height="38" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <header class="app-header" id="appHeader" role="banner">
+    <div class="brand">
+      <svg width="38" height="38" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="3" width="20" height="18" rx="3" fill="#e6f7ff"></rect>
         <path d="M5 8h14" stroke="#2b6cb0" stroke-width="1.2"></path>
         <path d="M5 12h14" stroke="#2b6cb0" stroke-width="1.2"></path>
       </svg>
-      <h1>Acompanhamento Pedagógico 2026</h1>
+      <h1>Acompanhamento Pedagógico 2025</h1>
     </div>
 
     <div class="header-actions">
-      <!-- Botão Novo Formulário: reseta e rola para topo -->
+      <!-- Input oculto para selecionar o PDF -->
+      <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none;">
+      
+      <!-- Botão de Carregar PDF -->
+      <button id="btnCarregarPdf" type="button" class="btn ghost" title="Carregar PDF preenchido para alterar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M12 15V3m0 0l-4 4m4-4l4 4" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 15v4a2 2 0 002 2h14a2 2 0 002-2v-4" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Carregar PDF
+      </button>
+
       <button id="btnResetTop" class="btn ghost" title="Novo formulário (limpar e ir ao topo)">
-        <!-- Ícone de refresh -->
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M20 7v6h-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4 17a8 8 0 118 8" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         Novo Formulário
       </button>
-	 </div>
+    </div>
   </header>
 
   <!-- ========== CONTAINER PRINCIPAL ========== -->
   <main class="container" role="main">
-    <div class="card" aria-live="polite">
+    <div class="card">
 
       <h2 class="section-title">Formulário de Acompanhamento Pedagógico</h2>
-      <p class="lead">Preencha as seções abaixo. Use o botão <strong>Gerar PDF</strong> quando finalizar.</p>
+      <p class="lead">Preencha as seções abaixo ou carregue um PDF preenchido para editar. Use o botão <strong>Gerar PDF</strong> quando finalizar.</p>
 
       <!-- Barra de Progresso -->
       <div class="progress-container">
         <div id="progressBar" class="progress-bar">0%</div>
       </div>
 
-      <!-- ======== FORMULÁRIO (mantém todos os campos originais, organizados) ======== -->
+      <!-- ======== FORMULÁRIO ======== -->
       <form id="formulario" class="form-root" autocomplete="off">
-        <!-- === Campos iniciais (professor / Turma / Turno) === -->
-        <!-- Comentário: Esses campos são usados para identificar o PDF gerado e o compartilhamento no WhatsApp -->
+        
+        <!-- === NOVOS CAMPOS DE IDENTIFICAÇÃO === -->
+        <div class="form-row form-grid-2">
           <div>
-            <label class="field">Nome do Professor
-              <input id="professor" name="professor" type="text" required placeholder="Digite o nome da professor">
+            <label class="field">Professora
+              <input id="professora" name="professora" type="text" required placeholder="Nome da professora">
             </label>
           </div>
-          
-		  <div>
+          <div>
             <label class="field">Turma
               <input id="turma" name="turma" type="text" required placeholder="Ex: Maternal A">
             </label>
           </div>
-          
-		  <div>
-            <label class="field">Turno
-              <input id="turno" name="turno" type="text" required placeholder="Ex: Manhã">
-            </label><br>
-          </div>
-        		
-		
-		<button type="button" class="accordion accent-1" data-panel="secao1" aria-expanded="false" id="secao1Btn">
-          <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
-            <div>
-              <span class="acc-title">Plano de Curso</span>
-            </div>
-          </div>
-          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>		
-		 		 
-		    <div class="form-row"><br>
-            <label class="field">Inserido</label>
-            <input id="inserido" type="text" name="inserido">
-          </div>
-		  
-		    <div class="form-row">
-            <label class="field">Falta iserir</label>
-            <input id="falta_inserir" type="text" name="falta_inserir">
-	          </div>
-	
-		<button type="button" class="accordion accent-1" data-panel="secao1" aria-expanded="false" id="secao1Btn">
-          <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
-            <div>
-              <span class="acc-title">Frequências</span>
-            </div>
-          </div>
-          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
+        </div>
 
-	
-		    <div class="form-row"><br>
-            <label class="field">Frequência inserida até:</label>
-            <input type="text" name="freq_ate">
+        <div class="form-row form-grid-3">
+          <div>
+            <label class="field">Observador(a)
+              <input id="observador" name="observador" type="text" required placeholder="Nome do observador(a)">
+            </label>
           </div>
-		  
-		   <div class="form-row">
-            <label class="field">Observações:</label>
-            <input type="text" name="obs_1">
+          <div>
+            <label class="field">Dia / Mês / Ano
+              <div style="display: flex; gap: 6px;">
+                <input id="dia" name="dia" type="text" required placeholder="Dia" maxlength="2" style="text-align: center;">
+                <input id="mes" name="mes" type="text" required placeholder="Mês" maxlength="2" style="text-align: center;">
+                <input id="ano" name="ano" type="text" required placeholder="Ano" maxlength="4" style="text-align: center;">
+              </div>
+            </label>
           </div>
-		  
-		  <button type="button" class="accordion accent-1" data-panel="secao1" aria-expanded="false" id="secao1Btn">
+        </div>
+
+        <!-- SEÇÃO I -->
+        <button type="button" class="accordion accent-1" data-panel="secao1" id="secao1Btn">
           <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
+            <span class="acc-icon">1</span>
             <div>
-              <span class="acc-title">Relatórios de objetivos de aprendizagem/habilidades:</span>
+              <span class="acc-title">SEÇÃO I - APROPRIAÇÃO DO CURRÍCULO</span>
+              <span class="acc-sub">Compreensão sobre currículo, BNCC e alfabetização.</span>
             </div>
           </div>
-          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none">
             <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-		  
-		  
-		  
-          <div class="form-row"><br>
-            <label class="field"></label>
-            <select name="rel_obj">
+        <div id="secao1" class="panel">
+          <div class="form-row">
+            <label class="field">1. Há compreensão sobre os impactos negativos das interações inadequadas para as crianças?</label>
+            <select name="SEC_I_1">
               <option value="">Selecione</option>
-              <option value="1">[1] 1º Bimestre</option>
-              <option value="2">[2] 2º Bimestre</option>
-              <option value="3">[3] 3º Bimestre</option>
-              <option value="4">[4] 4º Bimestre</option>
+              <option value="1">[1] Não conhece e não tem senso crítico formado sobre o objetivo da Educação Infantil; não expressa opinião sobre o tema.</option>
+              <option value="2">[2] Sim, conhece e/ou reconhece, porém não partilha dessa visão; discorda do currículo da rede e do Brasil.</option>
+              <option value="3">[3] Em processo, conhece superficialmente, mas tem desejo de conhecer mais e partilhar da mesma visão da rede.</option>
+              <option value="4">[4] Sim, conhece e/ou reconhece, e partilha dessa visão.</option>
             </select>
           </div>
-		  
-		  <div class="form-row">
-            <label class="field">Observações:</label>
-            <input type="text" name="obs_2">
-          </div>
-		  
-		  <button type="button" class="accordion accent-1" data-panel="secao1" aria-expanded="false" id="secao1Btn">
-          <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
-            <div>
-              <span class="acc-title">Relatórios descritivos:</span>
-            </div>
-          </div>
-          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-		
-		  
-		  <div class="form-row"><br>
-            <label class="field"></label>
-            <select name="rel_des">
+
+          <div class="form-row">
+            <label class="field">2. Há clareza sobre os objetivos da Educação Infantil?</label>
+            <select name="SEC_I_2">
               <option value="">Selecione</option>
-              <option value="1">[1] 1º Bimestre</option>
-              <option value="2">[2] 2º Bimestre</option>
-              <option value="3">[3] 3º Bimestre</option>
-              <option value="4">[4] 4º Bimestre</option>
+              <option value="1">[1] Não conhece e não tem senso crítico formado sobre o objetivo da Educação Infantil; não expressa opinião sobre o tema.</option>
+              <option value="2">[2] Sim, conhece e/ou reconhece, porém não partilha dessa visão; discorda do currículo da rede e do Brasil.</option>
+              <option value="3">[3] Em processo, conhece superficialmente, mas tem desejo de conhecer mais e partilhar da mesma visão da rede.</option>
+              <option value="4">[4] Sim, conhece e/ou reconhece, e partilha dessa visão.</option>
             </select>
           </div>
-		  
-		   <div class="form-row">
-            <label class="field">Observações:</label>
-            <input type="text" name="obs_3">
-          </div>
-		  
-		  <button type="button" class="accordion accent-1" data-panel="secao1" aria-expanded="false" id="secao1Btn">
-          <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
-            <div>
-              <span class="acc-title">Registros de aula</span>
-            </div>
-          </div>
-          <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-		  
-		     <div class="form-row"><br>
-            <label class="field">Registros de aulas até:</label>
-            <input type="text" name="registros_ate">
-          </div>
-		  
-		     <div class="form-row">
-            <label class="field">Observações:</label>
-            <input type="text" name="obs_4">
-          </div>
-		  
-		  </div>
 
-          
+          <div class="form-row">
+            <label class="field">3. Compreende que o papel na Educação Infantil vai além do cuidar?</label>
+            <select name="SEC_I_3">
+              <option value="">Selecione</option>
+              <option value="1">[1] Não conhece e não tem senso crítico formado sobre o objetivo da Educação Infantil; não expressa opinião sobre o tema.</option>
+              <option value="2">[2] Sim, conhece e/ou reconhece, porém não partilha dessa visão; discorda do currículo da rede e do Brasil.</option>
+              <option value="3">[3] Em processo, conhece superficialmente, mas tem desejo de conhecer mais e partilhar da mesma visão da rede.</option>
+              <option value="4">[4] Sim, conhece e/ou reconhece, e partilha dessa visão.</option>
+            </select>
+          </div>
 
+          <div class="form-row">
+            <label class="field">4. Reconhece a importância de trabalhar as competências gerais presentes na BNCC?</label>
+            <select name="SEC_I_4">
+              <option value="">Selecione</option>
+              <option value="1">[1] Não conhece e não tem senso crítico formado sobre o objetivo da Educação Infantil; não expressa opinião sobre o tema.</option>
+              <option value="2">[2] Sim, conhece e/ou reconhece, porém não partilha dessa visão; discorda do currículo da rede e do Brasil.</option>
+              <option value="3">[3] Em processo, conhece superficialmente, mas tem desejo de conhecer mais e partilhar da mesma visão da rede.</option>
+              <option value="4">[4] Sim, conhece e/ou reconhece, e partilha dessa visão.</option>
+            </select>
+          </div>
 
-        <!-- ========== AÇÕES FINAIS ========== -->
-        <div class="actions" role="region" aria-label="Ações do formulário">
-          <!-- Botão gerar PDF duplicado (pq header tem também) -->
+          <div class="form-row">
+            <label class="field">5. Reconhece a importância da alfabetização na Educação Infantil? Qual o papel da Educação Infantil nesse processo?</label>
+            <select name="SEC_I_5">
+              <option value="">Selecione</option>
+              <option value="1">[1] Não conhece e não tem senso crítico formado sobre o objetivo da Educação Infantil; não expressa opinião sobre o tema.</option>
+              <option value="2">[2] Sim, conhece e/ou reconhece, porém não partilha dessa visão; discorda do currículo da rede e do Brasil.</option>
+              <option value="3">[3] Em processo, conhece superficialmente, mas tem desejo de conhecer mais e partilhar da mesma visão da rede.</option>
+              <option value="4">[4] Sim, conhece e/ou reconhece, e partilha dessa visão.</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- AÇÕES FINAIS -->
+        <div class="actions">
           <button type="submit" id="btnGeneratePdf2" class="btn" title="Gerar PDF">
-		  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 3v12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M8 11l4 4 4-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M21 21H3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3v12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 11l4 4 4-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 21H3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
             Gerar PDF
           </button>
 
-          <!-- Botão limpar formulário (reset) - também disponível no header -->
-          <!-- <button type="reset" id="btnReset" class="btn ghost" title="Limpar formulário">-->
           <button id="btnLimparForm" type="reset" class="btn ghost"> 
-			Limpar Formulário
+            Limpar Formulário
           </button>
-
-         
         </div>
-	
-	
-	
-	
-
-
-
       </form>
-
     </div>
   </main>
 
-  <!-- ======== SCRIPTS - comportamento do accordion, reset e whatsapp share ======== -->
   <script src="script.js"></script>	
-  
   <script>
-    /**
-     * Script descritivo:
-     * - Controla o comportamento do accordion (abrir/fechar com animação)
-     * - Atualiza o link do WhatsApp com os dados principais (professor, turma, turno)
-     * - Controla o botão "Novo Formulário" do header (reset + scroll suave + destaque)
-     * - Fornece hooks para o botão Gerar PDF (atualmente placeholder)
-     */
-
     document.addEventListener('DOMContentLoaded', function(){
-      // ACCORDION: encontra todos os botões tipo accordion e liga o clique
       const accButtons = document.querySelectorAll('.accordion');
       accButtons.forEach(btn => {
         btn.addEventListener('click', function(){
@@ -501,118 +425,24 @@
           const panel = document.getElementById(panelId);
           const isOpen = panel.classList.contains('open');
 
-          // fecha todos
           document.querySelectorAll('.panel').forEach(p => {
             p.classList.remove('open');
             p.style.maxHeight = null;
-            p.setAttribute('aria-hidden','true');
           });
           document.querySelectorAll('.acc-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
 
           if(!isOpen){
-            // abre o selecionado
             panel.classList.add('open');
-            panel.setAttribute('aria-hidden','false');
             panel.style.maxHeight = panel.scrollHeight + 'px';
-            // gira a seta do botão clicado
             const arrow = this.querySelector('.acc-arrow');
             if(arrow) arrow.style.transform = 'rotate(180deg)';
-          } else {
-            panel.classList.remove('open');
-            panel.setAttribute('aria-hidden','true');
-            panel.style.maxHeight = null;
-            const arrow = this.querySelector('.acc-arrow');
-            if(arrow) arrow.style.transform = 'rotate(0deg)';
           }
         });
       });
 
-      // Inicialmente abre a primeira seção para orientação
       const firstBtn = document.querySelector('.accordion[data-panel="secao1"]');
       if(firstBtn) firstBtn.click();
-
-     /* // WHATSAPP: monta a mensagem com os campos principais
-      const whatsappLink = document.getElementById('whatsapp-share');
-      const professorInput = document.getElementById('Professor');
-      const turmaInput = document.getElementById('turma');
-      const turnoInput = document.getElementById('turno');
-
-      function updateWhatsapp(){
-        const professor = professorInput.value.trim() || '[Nome da professor]';
-        const turma = turmaInput.value.trim() || '[Turma]';
-        const turno = turnoInput.value.trim() || '[Turno]';
-        const text = encodeURIComponent(`Acompanhamento Pedagógico\\nprofessor: ${professor}\\nTurma: ${turma}\\nTurno: ${turno}\\n(Resumo gerado pelo sistema)`);
-        whatsappLink.href = `https://api.whatsapp.com/send?text=${text}`;
-      }
-
-      // atualiza ao digitar
-      [professorInput, turmaInput, turnoInput].forEach(el => {
-        el.addEventListener('input', updateWhatsapp);
-      });
-      updateWhatsapp();
-*/
-      // BOTÃO RESET no header: faz reset completo e rola para top com destaque
-      const btnResetTop = document.getElementById('btnResetTop');
-      const form = document.getElementById('formulario');
-      const appHeader = document.getElementById('appHeader');
-
-      function highlightHeader(){
-        appHeader.classList.add('highlight');
-        setTimeout(()=> appHeader.classList.remove('highlight'), 900);
-      }
-
-      btnResetTop.addEventListener('click', function(){
-        form.reset();
-       // updateWhatsapp();
-        window.scrollTo({top:0, behavior:'smooth'});
-        highlightHeader();
-        // fecha painéis abertos
-        document.querySelectorAll('.panel').forEach(p => {
-          p.classList.remove('open');
-          p.style.maxHeight = null;
-          p.setAttribute('aria-hidden','true');
-        });
-      });
-
-      // Botão Reset dentro do formulário (mantido para acessibilidade)
-      const btnReset = document.getElementById('btnReset');
-      btnReset.addEventListener('click', function(){
-        // delay leve para garantir que o form reset aconteça
-        setTimeout(()=> {
-          updateWhatsapp();
-          window.scrollTo({top:0, behavior:'smooth'});
-          highlightHeader();
-        }, 50);
-      });
-
-      // Botões Gerar PDF - hook para sua lógica de geração (placeholder)
-      const btnGeneratePdf = document.getElementById('btnGeneratePdf');
-      const btnGeneratePdf2 = document.getElementById('btnGeneratePdf2');
-
-      function gerarPdfPlaceholder(){
-        // Comentário: aqui você pode chamar sua rotina que usa pdf-lib (ou outra)
-        // para preencher um template PDF, usando os valores do formulário.
-        // Exemplo: coletar todos os campos e enviar para o servidor ou processar localmente.
-        //alert('Botão Gerar PDF clicado. Aqui implemente a lógica de geração do PDF usando pdf-lib ou outra solução.');
-		
-      }
-
-     // btnGeneratePdf.addEventListener('click', gerarPdfPlaceholder);
-     // btnGeneratePdf2.addEventListener('click', gerarPdfPlaceholder);
-
-      // Acessibilidade: permitir abrir/fechar com Enter/Space
-      accButtons.forEach(btn => {
-        btn.setAttribute('tabindex','0');
-        btn.addEventListener('keydown', function(e){
-          if(e.key === 'Enter' || e.key === ' '){
-            e.preventDefault();
-            this.click();
-          }
-        });
-      });
-
     });
   </script>
-
 </body>
 </html>
