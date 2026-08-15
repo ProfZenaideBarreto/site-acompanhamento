@@ -5,22 +5,29 @@
   <title>Acompanhamento Pedagógico 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Biblioteca para trabalhar com PDF se necessário (mantida do original) -->
-  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=w4xcpTqzU5qoGwUxExjvlr73s_mjuNdzpJp8m7Ror-vHeCP_l7X2GHAwrR7uDIaOnnSTrYawCCwbwuLhT4jWcvL4vI-njfMwSSRhBxKbNwNsRSNQGlxzqMlcwQL7hq8ZPE5pOH8oBVAjMKF5ljwjjBDeF-l5YZspwGT5U3feqevJIwDP-b0YbrmhhJ-XVwhvogP3xZLr7pVCFreAHjcW-NQbJBX3SZKiH1NRXdQSnidBfSKg0RWG4RApNp94lTT7Oh15J4e_8fHPUjKAEnfsGn7zNlSI0ycly38JF03dpg01UuCkKSW0284tR3F3ihfp" charset="UTF-8"></script><script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=w4xcpTqzU5qoGwUxExjvlr73s_mjuNdzpJp8m7Ror-vHeCP_l7X2GHAwrR7uDIaOnnSTrYawCCwbwuLhT4jWcvL4vI-njfMwSSRhBxKbNwNsRSNQGlxzqMlcwQL7hq8ZPE5pOH8oBVAjMKF5ljwjjBDeF-l5YZspwGT5U3feqevJIwDP-b0YbrmhhJ-XVwhvogP3xZLr7pVCFreAHjcW-NQbJBX3SZKiH1NRXdQSnidBfSKg0RWG4RApNp94lTT7Oh15J4e_8fHPUjKAEnfsGn7zNlSI0ycly38JF03dpg01UuCkKSW0284tR3F3ihfp" charset="UTF-8"></script>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
   <!-- ======== ESTILOS MODERNOS E RESPONSIVOS ======== -->
   <style>
     :root{
-      --bg:#f7fafc;
+      --bg:#f4f7f6;
       --card:#ffffff;
-      --text:#233240;
-      --muted:#6b7280;
-      --accent-1:#bfe8ff; /* azul claro */
-      --accent-2:#dff7ea; /* verde suave */
-      --accent-3:#fff6d6; /* amarelo pastel */
-      --accent-4:#ffeef6; /* rosa claro */
-      --accent-5:#fff3e0; /* laranja claro */
-      --primary:#2b6cb0;
-      --primary-dark:#1e4e8c;
+      --text:#1d2939;
+      --muted:#667085;
+      /* Cores extraídas do PDF (Verde Sertão, Amarelo Sol, Azul Patos, Vermelho Criança) */
+      --sertao-green: #1a7a44;
+      --sertao-yellow: #f5a623;
+      --sertao-blue: #0088cc;
+      --sertao-red: #e63946;
+      
+      --accent-1:#e0f2fe; /* azul claro */
+      --accent-2:#dcfce7; /* verde suave */
+      --accent-3:#fef3c7; /* amarelo pastel */
+      --accent-4:#ffe4e6; /* rosa/vermelho claro */
+      --accent-5:#ffedd5; /* laranja claro */
+      --primary: var(--sertao-green);
+      --primary-dark: #11532e;
       --success:#2f855a;
       --shadow: 0 6px 18px rgba(35,50,64,0.08);
       --radius:12px;
@@ -34,21 +41,33 @@
     body{
       margin:0;
       font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
-      background:var(--bg);
+      background: var(--bg);
       color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
     }
 
+    /* Borda colorida superior inspirada no PDF */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--sertao-green) 25%, var(--sertao-yellow) 25% 50%, var(--sertao-red) 50% 75%, var(--sertao-blue) 75%);
+      z-index: 1000;
+    }
+
     /* Cabeçalho fixo moderno */
     header.app-header{
       position:fixed;
-      top:0;
+      top:6px;
       left:0;
       right:0;
-      height:64px;
-      background:linear-gradient(90deg,var(--card),#f8fbff);
+      height:74px;
+      background:#ffffff;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -66,11 +85,28 @@
       align-items:center;
       gap:12px;
     }
+    .brand img.logo-header {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+    .brand-text-container {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--sertao-green);
+      text-transform: uppercase;
+    }
     .brand h1{
-      font-size:18px;
+      font-size:16px;
       margin:0;
-      color:var(--primary);
+      color:var(--primary-dark);
       letter-spacing:0.2px;
+      font-weight: 800;
     }
     .header-actions{
       display:flex;
@@ -84,7 +120,7 @@
       padding:10px 14px;
       border-radius:10px;
       border:none;
-      background: linear-gradient(180deg,var(--success),#2b8a51);
+      background: linear-gradient(180deg,var(--sertao-green),var(--primary-dark));
       color:white;
       cursor:pointer;
       font-weight:600;
@@ -94,15 +130,46 @@
     .btn.ghost{
       background:transparent;
       color:var(--primary);
-      border:1px solid rgba(43,108,176,0.08);
+      border:1px solid rgba(26,122,68,0.2);
       box-shadow:none;
     }
     .btn:active{transform:translateY(1px);}
 
-    /* Container do formulário (com espaço para o header fixo) */
+    /* Banner Visual do Sertão Criança */
+    .hero-banner {
+      background: #ffffff;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      border-left: 6px solid var(--sertao-yellow);
+    }
+    .hero-banner .hero-logo {
+      max-height: 90px;
+      width: auto;
+    }
+    .hero-banner .hero-info {
+      max-width: 65%;
+    }
+    .hero-banner .hero-info h2 {
+      margin: 0 0 6px 0;
+      color: var(--sertao-green);
+      font-size: 20px;
+      font-weight: 800;
+    }
+    .hero-banner .hero-info p {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Container do formulário */
     .container{
       max-width:1000px;
-      margin:92px auto 40px;
+      margin:100px auto 40px;
       padding:20px;
     }
 
@@ -110,14 +177,16 @@
     .card{
       background:var(--card);
       border-radius:var(--radius);
-      padding:18px;
+      padding:24px;
       box-shadow:var(--shadow);
     }
 
     h2.section-title{
       margin:0 0 10px 0;
-      font-size:16px;
-      color:var(--primary);
+      font-size:18px;
+      color:var(--sertao-green);
+      border-bottom: 2px solid var(--accent-1);
+      padding-bottom: 8px;
     }
     p.lead{
       margin:6px 0 18px 0;
@@ -129,17 +198,20 @@
     .accordion{
       width:100%;
       background:transparent;
-      border:0;
-      padding:12px 14px;
+      border:1px solid #e2e8f0;
+      padding:14px 16px;
       margin:10px 0;
       display:flex;
       align-items:center;
       justify-content:space-between;
       cursor:pointer;
       border-radius:12px;
-      transition:background .2s, transform .15s;
+      transition:background .2s, transform .15s, box-shadow 0.2s;
     }
-    .accordion:hover{ transform:translateY(-2px); }
+    .accordion:hover{ 
+      transform:translateY(-2px); 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
     .accordion .left{
       display:flex;
       gap:12px;
@@ -152,9 +224,12 @@
       display:inline-grid;
       place-items:center;
       font-size:16px;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
     .acc-title{
       font-weight:700;
+      color: var(--primary-dark);
     }
     .acc-sub{
       display:block;
@@ -180,7 +255,7 @@
       display:grid;
       grid-template-columns:1fr;
       gap:10px;
-      margin-bottom:10px;
+      margin-bottom:12px;
     }
 
     /* REALÇE VISUAL DE PERGUNTAS E RESPOSTAS */
@@ -194,22 +269,22 @@
     }
     label.field:has(+ select, + input[type="text"]) {
       color: var(--primary-dark);
-      background-color: #f1f5f9;
+      background-color: #f8fafc;
       padding: 8px 12px;
-      border-left: 4px solid var(--primary);
+      border-left: 4px solid var(--sertao-green);
       border-radius: 6px;
       margin-top: 8px;
     }
     .form-row > label.field:only-child {
       color: var(--primary-dark);
-      background-color: #f1f5f9;
+      background-color: #f8fafc;
       padding: 8px 12px;
-      border-left: 4px solid var(--primary);
+      border-left: 4px solid var(--sertao-green);
       border-radius: 6px;
       margin-top: 4px;
     }
     .form-row > label.field > b {
-      color: var(--primary);
+      color: var(--sertao-green);
       font-size: 15px;
     }
 
@@ -225,8 +300,8 @@
       transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
     }
     input[type="text"]:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+      border-color: var(--sertao-green);
+      box-shadow: 0 0 0 3px rgba(26, 122, 68, 0.15);
       background-color: #f8fafc;
     }
     select {
@@ -241,7 +316,9 @@
       display:flex;
       gap:10px;
       align-items:center;
-      margin-top:14px;
+      margin-top:20px;
+      padding-top: 15px;
+      border-top: 1px solid #e2e8f0;
     }
 
     /* WhatsApp button style */
@@ -258,36 +335,68 @@
       box-shadow:0 8px 20px rgba(37,211,102,0.12);
     }
 
-    /* Section accent backgrounds for header of each accordion */
-    .accent-1{ background: linear-gradient(90deg,var(--accent-1),#e6f7ff); }
-    .accent-2{ background: linear-gradient(90deg,var(--accent-2),#f0fff6); }
-    .accent-3{ background: linear-gradient(90deg,var(--accent-3),#fffdf0); }
-    .accent-4{ background: linear-gradient(90deg,var(--accent-4),#fff7fb); }
-    .accent-5{ background: linear-gradient(90deg,var(--accent-5),#fff7ed); }
+    /* Section accent backgrounds */
+    .accent-1{ background: linear-gradient(90deg,var(--accent-1),#ffffff); }
+    .accent-2{ background: linear-gradient(90deg,var(--accent-2),#ffffff); }
+    .accent-3{ background: linear-gradient(90deg,var(--accent-3),#ffffff); }
+    .accent-4{ background: linear-gradient(90deg,var(--accent-4),#ffffff); }
+    .accent-5{ background: linear-gradient(90deg,var(--accent-5),#ffffff); }
+
+    /* Barra de progresso com gradiente do PDF */
+    .progress-container {
+      width: 100%;
+      background-color: #e2e8f0;
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 14px;
+      margin-bottom: 20px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--sertao-green), var(--sertao-blue));
+      width: 0%;
+      color: white;
+      font-size: 10px;
+      text-align: center;
+      line-height: 14px;
+      transition: width 0.3s ease;
+    }
+
+    /* Rodapé institucional com logos do PDF */
+    .app-footer {
+      margin-top: 30px;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-align: center;
+      border-bottom: 4px solid var(--sertao-blue);
+    }
+    .app-footer img.footer-logos {
+      max-width: 100%;
+      height: auto;
+      max-height: 50px;
+      object-fit: contain;
+    }
+    .app-footer p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
 
     /* Small screens adjustments */
     @media (min-width:700px){
       .form-grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+      .hero-banner { flex-direction: row; }
     }
-  
-    /* Barra de progresso */
-    .progress-container {
-      width: 100%;
-      background-color: #e0e0e0;
-      border-radius: var(--radius);
-      overflow: hidden;
-      height: 18px;
-      margin-bottom: 15px;
-    }
-    .progress-bar {
-      height: 100%;
-      background-color: var(--primary);
-      width: 0%;
-      color: white;
-      font-size: 12px;
-      text-align: center;
-      line-height: 18px;
-      transition: width 0.3s ease;
+    @media (max-width:699px){
+      .hero-banner { flex-direction: column-reverse; text-align: center; gap: 15px; }
+      .hero-banner .hero-info { max-width: 100%; }
     }
 
 </style>
@@ -297,33 +406,56 @@
   <!-- ========== CABEÇALHO FIXO ========== -->
   <header class="app-header" id="appHeader" role="banner" aria-label="Cabeçalho do formulário">
     <div class="brand" aria-hidden="true">
-      <!-- Pequeno ícone educativo (SVG) -->
-      <svg width="38" height="38" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <rect x="2" y="3" width="20" height="18" rx="3" fill="#e6f7ff"></rect>
-        <path d="M5 8h14" stroke="#2b6cb0" stroke-width="1.2"></path>
-        <path d="M5 12h14" stroke="#2b6cb0" stroke-width="1.2"></path>
-      </svg>
-      <h1>Acompanhamento Pedagógico 2025</h1>
+      <!-- Logo Prefeitura de Patos do PDF -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Brasao_Patos_Paraiba.png/120px-Brasao_Patos_Paraiba.png" alt="Prefeitura de Patos" class="logo-header" onerror="this.style.display='none'" />
+      <div class="brand-text-container">
+        <span class="brand-sub">Secretaria de Educação • Núcleo de Educação Infantil</span>
+        <h1>Acompanhamento Pedagógico 2025</h1>
+      </div>
     </div>
 
     <div class="header-actions">
+      <!-- Botão Gerar PDF no cabeçalho -->
+      <button type="submit" form="formulario" id="btnGeneratePdfHeader" class="btn" title="Gerar PDF">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 11l4 4 4-4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 21H3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Gerar PDF
+      </button>
+
       <!-- Botão Novo Formulário: reseta e rola para topo -->
-      <button id="btnResetTop" class="btn ghost" title="Novo formulário (limpar e ir ao topo)">
+      <button id="btnResetTop" class="btn ghost" type="button" title="Novo formulário (limpar e ir ao topo)">
         <!-- Ícone de refresh -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M20 7v6h-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M4 17a8 8 0 118 8" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 7v6h-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M4 17a8 8 0 118 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         Novo Formulário
       </button>
-	 </div>
+    </div>
   </header>
 
   <!-- ========== CONTAINER PRINCIPAL ========== -->
   <main class="container" role="main">
+
+    <!-- Banner Sertão Criança baseado no PDF -->
+    <div class="hero-banner">
+      <div class="hero-info">
+        <h2>Sertão Criança</h2>
+        <p><strong>Aprimorando a qualidade da Educação Infantil.</strong> Suporte e mediação pedagógica contínua aos professores.</p>
+      </div>
+      <svg class="hero-logo" viewBox="0 0 200 80" width="160" height="64">
+        <text x="10" y="40" fill="#1a7a44" font-size="28" font-weight="900" font-family="Arial">Sertão</text>
+        <text x="25" y="68" fill="#e63946" font-size="32" font-weight="900" font-family="Arial">Criança</text>
+        <circle cx="150" cy="30" r="14" fill="#f5a623" />
+      </svg>
+    </div>
+
     <div class="card" aria-live="polite">
 
-      <h2 class="section-title">Formulário de Acompanhamento Pedagógico</h2>
+      <h2 class="section-title">Ficha de Observação da Prática Docente</h2>
       <p class="lead">Preencha as seções abaixo. Use o botão <strong>Gerar PDF</strong> quando finalizar.</p>
 
       <!-- Barra de Progresso -->
@@ -333,12 +465,11 @@
 
       <!-- ======== FORMULÁRIO (mantém todos os campos originais, organizados) ======== -->
       <form id="formulario" class="form-root" autocomplete="off">
-        <!-- === Campos iniciais (Creche / Turma / Turno) === -->
-        <!-- Comentário: Esses campos são usados para identificar o PDF gerado e o compartilhamento no WhatsApp -->
+        <!-- === Campos iniciais (Professora / Turma / Data / Observador) === -->
         <div class="form-row form-grid-2" aria-label="Informações iniciais">
           <div>
             <label class="field">Nome da Professora</label>
-            <input id="PROFESSORA" name="PROFESSORA" type="text" required placeholder="Digite o nome da Professor">
+            <input id="PROFESSORA" name="PROFESSORA" type="text" required placeholder="Digite o nome da Professora">
           </div>
           <div>
             <label class="field">Turma</label>
@@ -360,19 +491,17 @@
 
         <!-- ===========================================================
              SEÇÃO III - MEDIAÇÃO DOCENTE
-             Comentário: extensa seção com múltiplos campos para observação.
-             Mantive a estrutura original com identificação de professora/turma/datas.
              ============================================================ -->
         <button type="button" class="accordion accent-3" data-panel="secao3" aria-expanded="false" id="secao3Btn">
           <div class="left">
-            <span class="acc-icon" aria-hidden="true"></span>
+            <span class="acc-icon" aria-hidden="true">📋</span>
             <div>
               <span class="acc-title">SEÇÃO III - MEDIAÇÃO DOCENTE</span>
               <span class="acc-sub">Observação de estratégias, gestão do grupo, materiais e mediações.</span>
             </div>
           </div>
           <svg class="acc-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 9l6 6 6-6" stroke="#2b6cb0" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 9l6 6 6-6" stroke="#1a7a44" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <div id="secao3" class="panel" aria-hidden="true">
@@ -989,7 +1118,6 @@
               <option value="Escolha3">Não realizado </option>
             </select>
           </div>
-         >
 		  <br>
 
           <!-- 5. Gestão dos Cuidados e Promoção da Autonomia -->
@@ -1063,7 +1191,7 @@
 
         <!-- ========== AÇÕES FINAIS ========== -->
         <div class="actions" role="region" aria-label="Ações do formulário">
-          <!-- Botão gerar PDF duplicado (pq header tem também) -->
+          <!-- Botão gerar PDF -->
           <button type="submit" id="btnGeneratePdf2" class="btn" title="Gerar PDF">
 		  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 3v12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1073,40 +1201,30 @@
             Gerar PDF
           </button>
 
-          <!-- Botão limpar formulário (reset) - também disponível no header -->
-          <!-- <button type="reset" id="btnReset" class="btn ghost" title="Limpar formulário">-->
+          <!-- Botão limpar formulário (reset) -->
           <button id="btnLimparForm" type="reset" class="btn ghost"> 
 			Limpar Formulário
           </button>
 
-         
         </div>
-	
-	
-	
-	
-
-
 
       </form>
 
     </div>
+
+    <!-- RODAPÉ INSTITUCIONAL EXTRAÍDO DO PDF -->
+    <footer class="app-footer">
+      <p>SECRETARIA DE EDUCAÇÃO • NÚCLEO DE EDUCAÇÃO INFANTIL • PREFEITURA MUNICIPAL DE PATOS-PB</p>
+    </footer>
+
   </main>
 
-  <!-- ======== SCRIPTS - comportamento do accordion, reset e whatsapp share ======== -->
+  <!-- ======== SCRIPTS ======== -->
   <script src="script.js"></script>	
   
   <script>
-    /**
-     * Script descritivo:
-     * - Controla o comportamento do accordion (abrir/fechar com animação)
-     * - Atualiza o link do WhatsApp com os dados principais (creche, turma, turno)
-     * - Controla o botão "Novo Formulário" do header (reset + scroll suave + destaque)
-     * - Fornece hooks para o botão Gerar PDF (atualmente placeholder)
-     */
-
     document.addEventListener('DOMContentLoaded', function(){
-      // ACCORDION: encontra todos os botões tipo accordion e liga o clique
+      // ACCORDION
       const accButtons = document.querySelectorAll('.accordion');
       accButtons.forEach(btn => {
         btn.addEventListener('click', function(){
@@ -1114,7 +1232,6 @@
           const panel = document.getElementById(panelId);
           const isOpen = panel.classList.contains('open');
 
-          // fecha todos
           document.querySelectorAll('.panel').forEach(p => {
             p.classList.remove('open');
             p.style.maxHeight = null;
@@ -1123,11 +1240,9 @@
           document.querySelectorAll('.acc-arrow').forEach(a => a.style.transform = 'rotate(0deg)');
 
           if(!isOpen){
-            // abre o selecionado
             panel.classList.add('open');
             panel.setAttribute('aria-hidden','false');
             panel.style.maxHeight = panel.scrollHeight + 'px';
-            // gira a seta do botão clicado
             const arrow = this.querySelector('.acc-arrow');
             if(arrow) arrow.style.transform = 'rotate(180deg)';
           } else {
@@ -1140,31 +1255,10 @@
         });
       });
 
-      // Inicialmente abre a primeira seção para orientação
       const firstBtn = document.querySelector('.accordion[data-panel="secao1"]');
       if(firstBtn) firstBtn.click();
 
-     /* // WHATSAPP: monta a mensagem com os campos principais
-      const whatsappLink = document.getElementById('whatsapp-share');
-      const crecheInput = document.getElementById('creche');
-      const turmaInput = document.getElementById('turma');
-      const turnoInput = document.getElementById('turno');
-
-      function updateWhatsapp(){
-        const creche = crecheInput.value.trim() || '[Nome da Creche]';
-        const turma = turmaInput.value.trim() || '[Turma]';
-        const turno = turnoInput.value.trim() || '[Turno]';
-        const text = encodeURIComponent(`Acompanhamento Pedagógico\nCreche: ${creche}\nTurma: ${turma}\nTurno: ${turno}\n(Resumo gerado pelo sistema)`);
-        whatsappLink.href = `https://api.whatsapp.com/send?text=${text}`;
-      }
-
-      // atualiza ao digitar
-      [crecheInput, turmaInput, turnoInput].forEach(el => {
-        el.addEventListener('input', updateWhatsapp);
-      });
-      updateWhatsapp();
-*/
-      // BOTÃO RESET no header: faz reset completo e rola para top com destaque
+      // BOTÃO RESET
       const btnResetTop = document.getElementById('btnResetTop');
       const form = document.getElementById('formulario');
       const appHeader = document.getElementById('appHeader');
@@ -1176,10 +1270,8 @@
 
       btnResetTop.addEventListener('click', function(){
         form.reset();
-       // updateWhatsapp();
         window.scrollTo({top:0, behavior:'smooth'});
         highlightHeader();
-        // fecha painéis abertos
         document.querySelectorAll('.panel').forEach(p => {
           p.classList.remove('open');
           p.style.maxHeight = null;
@@ -1187,33 +1279,16 @@
         });
       });
 
-      // Botão Reset dentro do formulário (mantido para acessibilidade)
       const btnReset = document.getElementById('btnReset');
-      btnReset.addEventListener('click', function(){
-        // delay leve para garantir que o form reset aconteça
-        setTimeout(()=> {
-          updateWhatsapp();
-          window.scrollTo({top:0, behavior:'smooth'});
-          highlightHeader();
-        }, 50);
-      });
-
-      // Botões Gerar PDF - hook para sua lógica de geração (placeholder)
-      const btnGeneratePdf = document.getElementById('btnGeneratePdf');
-      const btnGeneratePdf2 = document.getElementById('btnGeneratePdf2');
-
-      function gerarPdfPlaceholder(){
-        // Comentário: aqui você pode chamar sua rotina que usa pdf-lib (ou outra)
-        // para preencher um template PDF, usando os valores do formulário.
-        // Exemplo: coletar todos os campos e enviar para o servidor ou processar localmente.
-        //alert('Botão Gerar PDF clicado. Aqui implemente a lógica de geração do PDF usando pdf-lib ou outra solução.');
-		
+      if(btnReset){
+        btnReset.addEventListener('click', function(){
+          setTimeout(()=> {
+            window.scrollTo({top:0, behavior:'smooth'});
+            highlightHeader();
+          }, 50);
+        });
       }
 
-     // btnGeneratePdf.addEventListener('click', gerarPdfPlaceholder);
-     // btnGeneratePdf2.addEventListener('click', gerarPdfPlaceholder);
-
-      // Acessibilidade: permitir abrir/fechar com Enter/Space
       accButtons.forEach(btn => {
         btn.setAttribute('tabindex','0');
         btn.addEventListener('keydown', function(e){
