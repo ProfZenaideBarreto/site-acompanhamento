@@ -1,70 +1,192 @@
 // ===============================
-// LÓGICA DE IMPORTAÇÃO E LEITURA DE PDF GERADO
+// RESTAURAÇÃO E SALVAMENTO AUTOMÁTICO
 // ===============================
-const btnCarregarPdf = document.getElementById("btnCarregarPdf");
-const pdfFileInput = document.getElementById("pdfFileInput");
+const formEl = document.getElementById("formulario");
+const progressBar = document.getElementById("progressBar");
+const STORAGE_KEY = "formAcompanhamento2025";
 
-if (btnCarregarPdf && pdfFileInput) {
-  btnCarregarPdf.addEventListener("click", () => {
-    pdfFileInput.click();
-  });
-
-  pdfFileInput.addEventListener("change", async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-      const form = pdfDoc.getForm();
-      const fields = form.getFields();
-
-      if (fields.length === 0) {
-        alert("Nenhum campo editável foi encontrado no PDF selecionado.");
-        return;
+// Função para salvar todos os campos
+function saveFormData() {
+  const dataToSave = [];
+  Array.from(formEl.elements).forEach(el => {
+    if (el.name) {
+      if (el.type === "checkbox" || el.type === "radio") {
+        dataToSave.push({ name: el.name, value: el.value, checked: el.checked, type: el.type });
+      } else {
+        dataToSave.push({ name: el.name, value: el.value, type: el.type });
       }
+    }
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+}
 
-      // Preenche os campos do formulário HTML com os dados extraídos do PDF
+// Função para restaurar todos os campos
+function restoreFormData() {
+  const savedData = localStorage.getItem(STORAGE_KEY);
+  if (!savedData) return;
+
+  try {
+    const dataArray = JSON.parse(savedData);
+    dataArray.forEach(item => {
+      const fields = Array.from(formEl.querySelectorAll(`[name="${item.name}"]`));
       fields.forEach(field => {
-        const name = field.getName();
-        let value = "";
-
-        try {
-          if (field instanceof PDFLib.PDFTextField) {
-            value = field.getText() || "";
-          } else if (field instanceof PDFLib.PDFDropdown) {
-            const selected = field.getSelected();
-            value = selected.length > 0 ? selected[0] : "";
-          } else if (field instanceof PDFLib.PDFCheckBox) {
-            value = field.isChecked() ? "on" : "";
-          } else if (field instanceof PDFLib.PDFRadioGroup) {
-            value = field.getSelected() || "";
+        if (item.type === "checkbox" || item.type === "radio") {
+          if (field.value === item.value) {
+            field.checked = item.checked;
           }
-        } catch (err) {
-          console.warn(`Erro ao ler valor do campo ${name}:`, err);
+        } else {
+          field.value = item.value;
         }
-
-        // Procura os inputs/selects correspondentes na página
-        const htmlFields = Array.from(formEl.querySelectorAll(`[name="${name}"]`));
-        htmlFields.forEach(htmlField => {
-          if (htmlField.type === "checkbox" || htmlField.type === "radio") {
-            htmlField.checked = (htmlField.value === value || value === "on");
-          } else {
-            htmlField.value = value;
-          }
-        });
       });
+    });
+  } catch (e) {
+    console.warn("Erro ao restaurar dados:", e);
+  }
+}
 
-      // Atualiza o progresso e persiste no localStorage
-      saveFormData();
+// Atualiza barra de progresso
+function updateProgress() {
+  const fields = Array.from(formEl.elements).filter(el =>
+    el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT"
+  );
+  const total = fields.length;
+  const filled = fields.filter(el => {
+    if (el.type === "checkbox" || el.type === "radio") {
+      return el.checked;
+    }
+    return el.value && el.value.trim() !== "";
+  }).length;
+
+  const percent = Math.round((filled / total) * 100) || 0;
+  progressBar.style.width = `${percent}%`;
+  progressBar.textContent = `${percent}%`;
+}
+
+// Restaurar no carregamento
+window.addEventListener("DOMContentLoaded", () => {
+  restoreFormData();
+  updateProgress();
+});
+
+// Salvar e atualizar progresso a cada mudança
+formEl.addEventListener("input", () => {
+  saveFormData();
+  updateProgress();
+});
+formEl.addEventListener("change", () => {
+  saveFormData();
+  updateProgress();
+});
+
+// Botão "Novo Formulário"
+document.getElementById("btnResetTop").addEventListener("click", () => {
+  if (confirm("Tem certeza que deseja iniciar um novo formulário? Todos os dados serão apagados.")) {
+    localStorage.removeItem(STORAGE_KEY);
+    formEl.reset();
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+});
+
+// Botão "Limpar Formulário" (mesma mensagem do novo formulário)
+const btnLimpar = document.getElementById("btnLimparForm");
+if (btnLimpar) {
+  btnLimpar.addEventListener("click", (e) => {
+    e.preventDefault();
+    if (confirm("Tem certeza que deseja limpar o formulário? Todos os dados serão apagados.")) {
+      localStorage.removeItem(STORAGE_KEY);
+      formEl.reset();
       updateProgress();
-      alert("Dados do PDF importados com sucesso! Você pode editá-los e gerar um novo PDF.");
-
-    } catch (err) {
-      console.error("Erro ao carregar o arquivo PDF:", err);
-      alert("Não foi possível ler os dados deste arquivo PDF. Certifique-se de que é um PDF válido gerado pelo sistema.");
-    } finally {
-      pdfFileInput.value = ""; // Limpa a seleção para permitir recarregar o mesmo arquivo se preciso
     }
   });
 }
+
+// ===============================
+// LÓGICA ORIGINAL DE GERAÇÃO DE PDF
+// ===============================
+formEl.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const formData = new FormData(e.target);
+  const data = {};
+  formData.forEach((value, key) => data[key] = value);
+
+  const existingPdfBytes = await fetch("Acompanhamentobase.pdf").then(res => {
+    if (!res.ok) throw new Error("Falha ao carregar Acompanhamentobase.pdf: " + res.status);
+    return res.arrayBuffer();
+  });
+  const pdfDoc = await PDFLib.PDFDocument.load(existingPdfBytes);
+  const form = pdfDoc.getForm();
+
+  function trySetField(fieldName, value) {
+    try {
+      if (form.getTextField(fieldName)) {
+        form.getTextField(fieldName).setText(String(value || ""));
+        return;
+      }
+    } catch {}
+    try {
+      if (form.getCheckBox(fieldName)) {
+        if (value === "on" || value === true || value === "true" || value === "1" || String(value).toLowerCase()==="sim") {
+          form.getCheckBox(fieldName).check();
+        } else {
+          form.getCheckBox(fieldName).uncheck();
+        }
+        return;
+      }
+    } catch {}
+    try {
+      if (form.getRadioGroup(fieldName)) {
+        form.getRadioGroup(fieldName).select(String(value));
+        return;
+      }
+    } catch {}
+    try {
+      if (form.getDropdown(fieldName)) {
+        form.getDropdown(fieldName).select(String(value));
+        return;
+      }
+    } catch {}
+    console.warn(`Campo não encontrado no PDF: ${fieldName}`);
+  }
+
+  Object.keys(data).forEach(key => {
+    trySetField(key, data[key]);
+  });
+
+  const helv = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+  form.updateFieldAppearances(helv);
+
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+
+  const PROFESSORARaw = data.PROFESSORA || data['Nome da PROFESSORA'] || '';
+  const TURMARaw  = data.TURMA  || data['Turma'] ||  '';
+  const OBSERVADORRaw  = data.OBSERVADOR  || data['Turno'] || '';
+  const DIARaw  = data.DIA  || data['DIA'] || '';
+  const MESRaw  = data.MES  || data['MES'] || '';
+  const ANORaw  = data.ANO  || data['ANO'] || '';
+	
+  function sanitizeFilename(str) {
+    return String(str || '')
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9 _-]/g, '')
+      .trim()
+      .replace(/\s+/g, '_')
+      || 'SemValor';
+  }
+
+  const nomeArquivo = `Acompanhamento_${sanitizeFilename(PROFESSORARaw)}_${sanitizeFilename(TURMARaw)}_${sanitizeFilename(OBSERVADORRaw)}_${sanitizeFilename(DIARaw)}.${sanitizeFilename(MESRaw)}.${sanitizeFilename(ANORaw)}.pdf`;
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = nomeArquivo;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+
+  console.log("PDF gerado:", nomeArquivo);
+});
