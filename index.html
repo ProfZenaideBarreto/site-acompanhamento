@@ -1,4 +1,3 @@
-	
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,7 +5,7 @@
   <title>Acompanhamento Pedagógico 2025</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Biblioteca para trabalhar com PDF se necessário (mantida do original) -->
-  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=w4xcpTqzU5qoGwUxExjvlr73s_mjuNdzpJp8m7Ror-vHeCP_l7X2GHAwrR7uDIaOnnSTrYawCCwbwuLhT4jWcvL4vI-njfMwSSRhBxKbNwNsRSNQGlxzqMlcwQL7hq8ZPE5pOH8oBVAjMKF5ljwjjBDeF-l5YZspwGT5U3feqevJIwDP-b0YbrmhhJ-XVwhvogP3xZLr7pVCFreAHjcW-NQbJBX3SZKiH1NRXdQSnidBfSKg0RWG4RApNp94lTT7Oh15J4e_8fHPUjKAEnfsGn7zNlSI0ycly38JF03dpg01UuCkKSW0284tR3F3ihfp" charset="UTF-8"></script><script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
   <!-- ======== ESTILOS MODERNOS E RESPONSIVOS ======== -->
   <style>
@@ -21,6 +20,7 @@
       --accent-4:#ffeef6; /* rosa claro */
       --accent-5:#fff3e0; /* laranja claro */
       --primary:#2b6cb0;
+      --primary-dark:#1e4e8c;
       --success:#2f855a;
       --shadow: 0 6px 18px rgba(35,50,64,0.08);
       --radius:12px;
@@ -182,21 +182,58 @@
       gap:10px;
       margin-bottom:10px;
     }
+
+    /* REALÇE VISUAL DE PERGUNTAS E RESPOSTAS */
     label.field{
       display:block;
-      font-size:13px;
-      color:var(--text);
+      font-size:14px;
+      font-weight:600;
+      color:#1e293b;
       margin-bottom:4px;
+      line-height:1.4;
     }
+    label.field:has(+ select, + input[type="text"]) {
+      color: var(--primary-dark);
+      background-color: #f1f5f9;
+      padding: 8px 12px;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      margin-top: 8px;
+    }
+    .form-row > label.field:only-child {
+      color: var(--primary-dark);
+      background-color: #f1f5f9;
+      padding: 8px 12px;
+      border-left: 4px solid var(--primary);
+      border-radius: 6px;
+      margin-top: 4px;
+    }
+    .form-row > label.field > b {
+      color: var(--primary);
+      font-size: 15px;
+    }
+
     input[type="text"], select, textarea{
       width:100%;
       padding:10px 12px;
       border-radius:10px;
-      border:1px solid rgba(15,23,42,0.08);
+      border:1.5px solid #cbd5e1;
       outline:none;
       font-size:14px;
-      background:linear-gradient(180deg,#fff,#fbfdff);
+      background:#ffffff;
+      color: #0f172a;
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
     }
+    input[type="text"]:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(43, 108, 176, 0.15);
+      background-color: #f8fafc;
+    }
+    select {
+      cursor: pointer;
+      font-weight: 500;
+    }
+
     textarea{min-height:80px; resize:vertical;}
 
     /* Buttons area */
@@ -300,14 +337,12 @@
         <!-- Comentário: Esses campos são usados para identificar o PDF gerado e o compartilhamento no WhatsApp -->
         <div class="form-row form-grid-2" aria-label="Informações iniciais">
           <div>
-            <label class="field">Nome da Professora
-              <input id="PROFESSORA" name="PROFESSORA" type="text" required placeholder="Digite o nome da Professor">
-            </label>
+            <label class="field">Nome da Professora</label>
+            <input id="PROFESSORA" name="PROFESSORA" type="text" required placeholder="Digite o nome da Professor">
           </div>
           <div>
-            <label class="field">Turma
-              <input id="TURMA" name="TURMA" type="text" required placeholder="Ex: Maternal A">
-            </label>
+            <label class="field">Turma</label>
+            <input id="TURMA" name="TURMA" type="text" required placeholder="Ex: Maternal A">
           </div>
 		 <div>
 			<label class="field">Data</label>
@@ -318,9 +353,8 @@
 			</div>
 			</div>
           <div>
-            <label class="field">Observador
-              <input id="OBSERVADOR" name="OBSERVADOR" type="text" required placeholder="">
-            </label>
+            <label class="field">Observador</label>
+            <input id="OBSERVADOR" name="OBSERVADOR" type="text" required placeholder="">
           </div>
         </div>
 
@@ -1120,7 +1154,7 @@
         const creche = crecheInput.value.trim() || '[Nome da Creche]';
         const turma = turmaInput.value.trim() || '[Turma]';
         const turno = turnoInput.value.trim() || '[Turno]';
-        const text = encodeURIComponent(`Acompanhamento Pedagógico\\nCreche: ${creche}\\nTurma: ${turma}\\nTurno: ${turno}\\n(Resumo gerado pelo sistema)`);
+        const text = encodeURIComponent(`Acompanhamento Pedagógico\nCreche: ${creche}\nTurma: ${turma}\nTurno: ${turno}\n(Resumo gerado pelo sistema)`);
         whatsappLink.href = `https://api.whatsapp.com/send?text=${text}`;
       }
 
