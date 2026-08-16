@@ -1,1 +1,3 @@
-![Descrição da imagem](./logo sertão criança.png)
+# Logo
+
+![Logo Sertão Criança](./logo-sertao-crianca.png)
