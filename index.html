@@ -309,6 +309,20 @@
       font-weight: 500;
     }
 
+    /* === CORREÇÃO DA COR VERMELHA PARA A OPÇÃO "SELECIONE" === */
+    select:has(option[value=""]:checked) {
+      color: red;
+    }
+
+    select option {
+      color: #0f172a;
+    }
+
+    select option[value=""] {
+      color: red;
+      font-weight: 600;
+    }
+
     textarea{min-height:80px; resize:vertical;}
 
     /* Buttons area */
@@ -427,7 +441,6 @@
 
       <!-- Botão Novo Formulário: reseta e rola para topo -->
       <button id="btnResetTop" class="btn ghost" type="button" title="Novo formulário (limpar e ir ao topo)">
-        <!-- Ícone de refresh -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M20 7v6h-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           <path d="M4 17a8 8 0 118 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -463,9 +476,8 @@
         <div id="progressBar" class="progress-bar">0%</div>
       </div>
 
-      <!-- ======== FORMULÁRIO (mantém todos os campos originais, organizados) ======== -->
+      <!-- ======== FORMULÁRIO ======== -->
       <form id="formulario" class="form-root" autocomplete="off">
-        <!-- === Campos iniciais (Professora / Turma / Data / Observador) === -->
         <div class="form-row form-grid-2" aria-label="Informações iniciais">
           <div>
             <label class="field">Nome da Professora</label>
@@ -489,9 +501,7 @@
           </div>
         </div>
 
-        <!-- ===========================================================
-             SEÇÃO III - MEDIAÇÃO DOCENTE
-             ============================================================ -->
+        <!-- SEÇÃO III - MEDIAÇÃO DOCENTE -->
         <button type="button" class="accordion accent-3" data-panel="secao3" aria-expanded="false" id="secao3Btn">
           <div class="left">
             <span class="acc-icon" aria-hidden="true">📋</span>
@@ -506,10 +516,8 @@
         </button>
         <div id="secao3" class="panel" aria-hidden="true">
         
-		  <br>
-		  <br>
+		  <br><br>
 
-          <!-- 1. Estratégias Didáticas (1.1 a 1.4) -->
           <div class="form-row">
             <label class="field"><b>1. Estrategias Didáticas</b></label>
           </div>
@@ -539,7 +547,6 @@
             </select>
           </div>
 
-		
           <div class="form-row">
             <label class="field">Utiliza materiais adequados ao tema e/ou à faixa etária. </label>
             <select name="1.1.3">
@@ -580,11 +587,10 @@
             </select>
           </div>
 		  
-		  <br>
-          <br>  
+		  <br><br>  
 
           <!-- 1.2 Brincadeira -->
-		    <br>  
+		  <br>  
 		<div class="form-row">
             <label class="field"><b>1.2 Brincadeira </b></label>
           </div>
@@ -618,12 +624,9 @@
               <option value="Escolha3">Não realizado </option>
             </select>
           </div>
-		  
-         
 
           <!-- 1.3 Tipos de Práticas -->
-		  
-		     <br>  
+		  <br>  
 		<div class="form-row">
             <label class="field"><b>1.3 Tipos de Práticas Pedagógicas</b></label>
           </div>
@@ -668,11 +671,9 @@
             </select>
           </div>
 		  
- 
-		   <br>
-		    <br>
+ 		   <br><br>
 
-          <!-- 2. Gestão do Grupo (2.1 Tempo e Rotina etc.) -->
+          <!-- 2. Gestão do Grupo -->
           <div class="form-row">
             <label class="field"><b>2. Gestão do Grupo</b></label>
           </div>
@@ -752,8 +753,6 @@
             </select>
           </div>
 
-          
-
           <!-- 2.2 Espaço -->
 		  <br>
 		  <div class="form-row">
@@ -779,10 +778,8 @@
               <option value="Escolha3">Não realizado </option>
             </select>
           </div>
-		
 
           <!-- 2.3 Materiais -->
-		  
 		  <br>
 		  <div class="form-row">
             <label class="field"><b>2.3 Materiais</b></label>
@@ -827,10 +824,8 @@
               <option value="Escolha3">Não realizado </option>
             </select>
           </div>
-		  
-          
 
-          <!-- 2.3.1 Uso do material nas produções individuais das crianças -->
+          <!-- 2.3.1 Uso do material -->
           <div class="form-row">
             <label class="field"><b>2.3.1 Uso do material nas produções individuais das crianças</b></label>
             <label class="field">Dimensão Transversal: Relação tempo x tipo de material utilizado</label>
@@ -864,7 +859,6 @@
             </select>
           </div>
 
-
           <div class="form-row">
             <label class="field">4. Uso de materiais bidimensionais e tridimensionais com intencionalidade</label>
             <select name="2.3.1_4CHECK">
@@ -874,7 +868,7 @@
             </select>
           </div>
 
-          <!-- Síntese para análise da coordenadora -->
+          <!-- Síntese -->
           <div class="form-row">
             <label class="field">Durante o tempo observado, qual tipo de material predominou nas experiências de produção individual das crianças?</label>
             <label class="field">Folhas pré-prontas (xerox)</label>
@@ -962,14 +956,12 @@
             </select>
           </div>
 
-       
 		  <br>
 
           <!-- 4. Respeito e Proteção à Integridade -->
           <div class="form-row">
             <label class="field"><b>4. Respeito e Proteção à Integridade</b></label>
           </div><br>
-		  
 		  
 		  <div class="form-row">
             <label class="field"><b>4.1 Interações Verbais e Físicas</b></label>
@@ -1106,9 +1098,7 @@
               <option value="Escolha3">Não realizado </option>
             </select>
           </div>
-         
 
-        
           <div class="form-row">
             <label class="field">Oferece ajuda durante a alimentação e troca, com cuidado e atenção individualizada.</label>
             <select name="4.4.3">
@@ -1121,7 +1111,6 @@
 		  <br>
 
           <!-- 5. Gestão dos Cuidados e Promoção da Autonomia -->
-		  
 		  <div class="form-row">
             <label class="field"><b>5. Gestão dos Cuidados e Promoção da Autonomia</b></label>
           </div>
@@ -1183,15 +1172,11 @@
             <input type="text" name="COMENTARIOS">
           </div>
 
-           
-
 			</div>
 		</div>
-		
 
         <!-- ========== AÇÕES FINAIS ========== -->
         <div class="actions" role="region" aria-label="Ações do formulário">
-          <!-- Botão gerar PDF -->
           <button type="submit" id="btnGeneratePdf2" class="btn" title="Gerar PDF">
 		  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M12 3v12" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1201,18 +1186,16 @@
             Gerar PDF
           </button>
 
-          <!-- Botão limpar formulário (reset) -->
           <button id="btnLimparForm" type="reset" class="btn ghost"> 
 			Limpar Formulário
           </button>
-
         </div>
 
       </form>
 
     </div>
 
-    <!-- RODAPÉ INSTITUCIONAL EXTRAÍDO DO PDF -->
+    <!-- RODAPÉ INSTITUCIONAL -->
     <footer class="app-footer">
       <p>SECRETARIA DE EDUCAÇÃO • NÚCLEO DE EDUCAÇÃO INFANTIL • PREFEITURA MUNICIPAL DE PATOS-PB</p>
     </footer>
